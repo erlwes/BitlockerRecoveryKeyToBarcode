@@ -1,4 +1,4 @@
-Function BitLockerRCToBarcode {
+Function BitLockerRKToBarcode {
     Param(
         [Parameter(Mandatory = $false, ValueFromPipeline = $true)][ValidateScript({$_ -match '^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$'}, ErrorMessage = 'Please enter a valid BitLocker Recovery Key (48 digits in 8 groups of 6 digits separated by hyphens')]
         [string]$BitlockerRecoveryKey,
@@ -139,4 +139,4 @@ Function BitLockerRCToBarcode {
     $Form.ShowDialog() | Out-Null
 }
 
-BitLockerRCToBarcode
+BitLockerRKToBarcode
