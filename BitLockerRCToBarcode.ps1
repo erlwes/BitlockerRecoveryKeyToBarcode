@@ -47,6 +47,7 @@ Function BitLockerRCToBarcode {
     $global:oLabel1 = New-Object System.Windows.Forms.Label
     $oLabel1.Location = New-Object System.Drawing.Size(50, 200)
     $oLabel1.Size = New-Object System.Drawing.Size(900, 80)
+    $oLabel1.BackColor = 'White'
     $Form.Controls.Add($oLabel1)
 
     $barCodeLabel2 = New-Object System.Windows.Forms.Label
@@ -56,8 +57,9 @@ Function BitLockerRCToBarcode {
     $Form.Controls.Add($barCodeLabel2)
 
     $global:oLabel2 = New-Object System.Windows.Forms.Label
-    $oLabel2.Location = New-Object System.Drawing.Size(50, 600)
+    $oLabel2.Location = New-Object System.Drawing.Size(50, 600)    
     $oLabel2.Size = New-Object System.Drawing.Size(900, 80)
+    $oLabel2.BackColor = 'White'
 
 
     $barCodeLabel3 = New-Object System.Windows.Forms.Label
@@ -69,6 +71,7 @@ Function BitLockerRCToBarcode {
     $global:oLabel3 = New-Object System.Windows.Forms.Label
     $oLabel3.Location = New-Object System.Drawing.Size(50, 1000)
     $oLabel3.Size = New-Object System.Drawing.Size(900, 80)
+    $oLabel3.BackColor = 'White'
 
     $barcodeFontName = "CCode39"
     $barcodeFont = New-Object System.Drawing.Font($barcodeFontName, 30)
