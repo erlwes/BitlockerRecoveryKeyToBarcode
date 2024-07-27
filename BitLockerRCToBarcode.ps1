@@ -1,17 +1,56 @@
 Function BitLockerRCToBarcode {
     Param(
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true)][ValidateScript({$_ -match '^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$'}, ErrorMessage = 'Please enter a valid BitLocker Recovery Key (48 digits in 8 groups of 6 digits separated by hyphens')]
+        [string]$BitlockerRecoveryKey,
         [string]$useAlternativeBarcodeFont
     )
+    Function GenerateBarcodes {
+        if ($BitlockerRecoveryKey -match '^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$') {
+            $inputText = $BitlockerRecoveryKey
+            $TextBox.Text = $BitlockerRecoveryKey
+            $BitlockerRecoveryKey = $false
+        }
+        else {
+            $inputText = $TextBox.Text
+        }        
+        if ($inputText -match '^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$') {            
+            $part1 = "*$($inputText.Substring(0, 20))*"  # First 20 characters (first three groups)
+            $barCodeLabel1.Text = "Part one ($part1)"
+            $oLabel1.Text = "$part1"
+
+            $part2 = "*$($inputText.Substring(20, 20))*" # Next 20 characters (next three groups)
+            $barCodeLabel2.Text = "Part two ($part2)"
+            $oLabel2.Text = "$part2"
+
+            $part3 = "*$($inputText.Substring(40, 15))*" # Last 15 characters (last two groups)
+            $barCodeLabel3.Text = "Part three ($part3)"
+            $oLabel3.Text = "$part3"
+
+        } else {
+            [System.Windows.Forms.MessageBox]::Show("Please enter a valid BitLocker Recovery Key (48 digits in 8 groups of 6 digits separated by hyphens).")
+        }
+    }
+
     Add-Type -AssemblyName System.Windows.Forms
     Add-Type -AssemblyName System.Drawing
 
-    $Form = New-Object System.Windows.Forms.Form    
-    $Form.width = 1015
-    $Form.height = 1200
-    $Form.Text = "BitLocker Recovery Key Barcode Generator"
-
     $Font = New-Object System.Drawing.Font("Arial", 10)
+    
+    $Form = New-Object System.Windows.Forms.Form
+    $Form.Width = 1015
+    $Form.Height = 1200
     $Form.Font = $Font
+    $Form.Text = "BitLocker Recovery Key Barcode Generator"
+    $Form.Add_KeyDown({
+        param (
+            [System.Object]$sender,
+            [System.Windows.Forms.KeyEventArgs]$e
+        )        
+        if ($e.KeyCode -eq [System.Windows.Forms.Keys]::Escape) {
+            $form.Close()
+        }
+    })
+    $Form.KeyPreview = $true
     
     $InputLabel = New-Object System.Windows.Forms.Label
     $InputLabel.Text = "Enter BitLocker Recovery Key:"
@@ -31,7 +70,7 @@ Function BitLockerRCToBarcode {
     $GenerateButton.Width = 150
     $Form.Controls.Add($GenerateButton)
 
-    # Add and set the BarCode text and TTF Font for three labels
+    # Barcode 1
     $barCodeLabel1 = New-Object System.Windows.Forms.Label
     $barCodeLabel1.Text = ''
     $barCodeLabel1.Location = New-Object System.Drawing.Size(50, 170)
@@ -42,8 +81,8 @@ Function BitLockerRCToBarcode {
     $oLabel1.Location = New-Object System.Drawing.Size(50, 200)
     $oLabel1.Size = New-Object System.Drawing.Size(900, 80)
     $oLabel1.BackColor = 'White'
-    $Form.Controls.Add($oLabel1)
-
+    
+    # Barcode 2
     $barCodeLabel2 = New-Object System.Windows.Forms.Label
     $barCodeLabel2.Text = ''
     $barCodeLabel2.Location = New-Object System.Drawing.Size(50, 570)
@@ -55,6 +94,7 @@ Function BitLockerRCToBarcode {
     $oLabel2.Size = New-Object System.Drawing.Size(900, 80)
     $oLabel2.BackColor = 'White'
 
+    # Barcode 3
     $barCodeLabel3 = New-Object System.Windows.Forms.Label
     $barCodeLabel3.Text = ''
     $barCodeLabel3.Location = New-Object System.Drawing.Size(50, 970)
@@ -66,46 +106,35 @@ Function BitLockerRCToBarcode {
     $oLabel3.Size = New-Object System.Drawing.Size(900, 80)
     $oLabel3.BackColor = 'White'
 
+    #Set the barcode font, and verify that it is installed
     if ($useAlternativeBarcodeFont) {
         $barcodeFont = $useAlternativeBarcodeFont
     }
     else {
         $barcodeFontName = "CCode39"
-    }
-    
-    $barcodeFont = New-Object System.Drawing.Font($barcodeFontName, 30)
-    
+    }    
+    $barcodeFont = New-Object System.Drawing.Font($barcodeFontName, 30)    
     if ($barcodeFont.Name -ne $barcodeFontName) {
         [System.Windows.Forms.MessageBox]::Show("Failed to set barcode font. Please ensure 'CCode39' font is installed.")
         return
     }
-
     $oLabel1.Font = $barcodeFont
     $oLabel2.Font = $barcodeFont
     $oLabel3.Font = $barcodeFont
 
-    
+    $Form.Controls.Add($oLabel1)
     $Form.Controls.Add($oLabel2)
     $Form.Controls.Add($oLabel3)
     
     $GenerateButton.add_Click({
-        $inputText = $TextBox.Text
-        if ($inputText -match '^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$') {            
-            $part1 = "*$($inputText.Substring(0, 20))*"  # First 20 characters (first three groups)
-            $barCodeLabel1.Text = "Part one ($part1)"
-            $oLabel1.Text = "$part1"
-
-            $part2 = "*$($inputText.Substring(20, 20))*" # Next 20 characters (next three groups)
-            $barCodeLabel2.Text = "Part two ($part2)"
-            $oLabel2.Text = "$part2"
-
-            $part3 = "*$($inputText.Substring(40, 15))*" # Last 15 characters (last two groups)
-            $barCodeLabel3.Text = "Part three ($part3)"
-            $oLabel3.Text = "$part3"           
-        } else {
-            [System.Windows.Forms.MessageBox]::Show("Please enter a valid BitLocker Recovery Key (48 digits in 8 groups of 6 digits separated by hyphens).")
-        }
+        GenerateBarcodes
     })
+
+    if ($BitlockerRecoveryKey) {
+        GenerateBarcodes
+        $BitlockerRecoveryKey = $null
+    }
+
     $Form.Add_Shown({$Form.Activate()})
     $Form.ShowDialog() | Out-Null
 }
