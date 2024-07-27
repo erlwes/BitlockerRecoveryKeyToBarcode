@@ -8,5 +8,4 @@ Generates barcodes from BitLocker Recovery Keys and display it on screen.
 Example Bitlocker Recovery Key:
 `002130-563959-533643-315590-484044-259380-247291-123563`
 
-![image](https://github.com/user-attachments/assets/c6cdca40-8e61-48e9-951c-cc80c826ebb1)
-
+![image](https://github.com/user-attachments/assets/10f477fa-79d7-4e15-ae3b-05bbef32760a)
