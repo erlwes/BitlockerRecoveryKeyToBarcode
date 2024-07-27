@@ -14,7 +14,8 @@ Generates barcodes from BitLocker Recovery Keys and display it on screen. The sc
 ![image](https://github.com/user-attachments/assets/10f477fa-79d7-4e15-ae3b-05bbef32760a)
 
 # Tips 💡
-Hitting the "Escape" character on your keyboard will close the GUI and you will return to your shell
+* Hitting the "Escape" character on your keyboard will close the GUI and you will return to your shell
+* It seems that CCD or CMOS scanners will be the best alternative for scanning barcodes of computer screens. Due to ani-reflection coating, laser readers will not always work (so i read)
 
 # Usage
 
@@ -42,3 +43,7 @@ This will use the alternative font specified to generate the barcodes, if the co
 ```PowerShell
 BitLockerRKToBarcode -useAlternativeBarcodeFont "Libre Barcode 128"
 ```
+
+# QR-codes
+QR-codes would be better, because one would be able to put the entire key in one code, but readers that support this are abit more expensive, and its harder to do in PowerShell.
+There are projects on GitHub generating this QR-codes from string, offline, in script. Some of which loads a binary into memory from a very long string (yikes).
