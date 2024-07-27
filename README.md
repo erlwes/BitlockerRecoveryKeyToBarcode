@@ -40,5 +40,5 @@ BitLockerRKToBarcode -BitlockerRecoveryKey "002130-563959-533643-315590-484044-2
 ### 🔵Example 4 - Alternative barcode-fonts
 This will use the alternative font specified to generate the barcodes, if the code 39 standard is not compatible with your scanner.
 ```PowerShell
-BitLockerRKToBarcode -useAlternativeBarcodeFont "Libre Barcode 128 Regular"
+BitLockerRKToBarcode -useAlternativeBarcodeFont "Libre Barcode 128"
 ```
