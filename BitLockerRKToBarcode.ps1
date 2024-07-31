@@ -2,8 +2,9 @@ Function BitLockerRKToBarcode {
     Param(
         [Parameter(Mandatory = $false, ValueFromPipeline = $true)][ValidateScript({$_ -match '^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$'}, ErrorMessage = 'Please enter a valid BitLocker Recovery Key (48 digits in 8 groups of 6 digits separated by hyphens')]
         [string]$BitlockerRecoveryKey,
-        [string]$useAlternativeBarcodeFont
-    )   
+        [string]$useAlternativeBarcodeFont,
+        [switch]$EncodeDashes #Use if scanned '-' turns into '+'
+    )
 
     Function GenerateBarcodes {
         if ($BitlockerRecoveryKey -match '^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$' -and $Script:FromPipline -ne 'Done') {
@@ -17,14 +18,21 @@ Function BitLockerRKToBarcode {
         if ($inputText -match '^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$') {            
             $part1 = "*$($inputText.Substring(0, 20))*"  # First 20 characters (first three groups)
             $barCodeLabel1.Text = "Part one ($part1)"
-            $oLabel1.Text = "$part1"
 
             $part2 = "*$($inputText.Substring(20, 20))*" # Next 20 characters (next three groups)
             $barCodeLabel2.Text = "Part two ($part2)"
-            $oLabel2.Text = "$part2"
-
+            
             $part3 = "*$($inputText.Substring(40, 15))*" # Last 15 characters (last two groups)
             $barCodeLabel3.Text = "Part three ($part3)"
+
+            if ($EncodeDashes) {
+                $part1 = $part1 -replace '-', '/'
+                $part2 = $part2 -replace '-', '/'
+                $part3 = $part3 -replace '-', '/'
+            }
+
+            $oLabel1.Text = "$part1"
+            $oLabel2.Text = "$part2"
             $oLabel3.Text = "$part3"
 
         } else {
@@ -38,8 +46,8 @@ Function BitLockerRKToBarcode {
     $Font = New-Object System.Drawing.Font("Arial", 10)
     
     $Form = New-Object System.Windows.Forms.Form
-    $Form.Width = 1015
-    $Form.Height = 1200
+    $Form.Width = 685
+    $Form.Height = 720
     $Form.Font = $Font
     $Form.Text = "BitLocker Recovery Key Barcode Generator"
     $Form.Add_KeyDown({
@@ -55,66 +63,75 @@ Function BitLockerRKToBarcode {
     
     $InputLabel = New-Object System.Windows.Forms.Label
     $InputLabel.Text = "Enter BitLocker Recovery Key:"
-    $InputLabel.Location = New-Object System.Drawing.Size(50, 70)
-    $InputLabel.Size = New-Object System.Drawing.Size(250, 25)
+    $InputLabel.Location = New-Object System.Drawing.Size(50, 30)
+    $InputLabel.Size = New-Object System.Drawing.Size(250, 18)
     $Form.Controls.Add($InputLabel)
     
     $TextBox = New-Object System.Windows.Forms.TextBox
-    $TextBox.Location = New-Object System.Drawing.Size(50, 100)
-    $TextBox.Size = New-Object System.Drawing.Size(400, 30)
+    $TextBox.Location = New-Object System.Drawing.Size(50, 50)
+    $TextBox.Size = New-Object System.Drawing.Size(400, 32)
     $Form.Controls.Add($TextBox)
     
     $GenerateButton = New-Object Windows.Forms.Button
     $GenerateButton.Text = "Generate Barcodes"
-    $GenerateButton.Top = 100
-    $GenerateButton.Left = 470
+    $GenerateButton.Location = New-Object System.Drawing.Size(470, 50)
     $GenerateButton.Width = 150
     $Form.Controls.Add($GenerateButton)
 
-    # Barcode 1
+    # Barcode 1    
+    $global:oLabel1 = New-Object System.Windows.Forms.Label
+    $oLabel1.Location = New-Object System.Drawing.Size(50, 150)
+    $oLabel1.Size = New-Object System.Drawing.Size(570, 80)
+    $oLabel1.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
+    $oLabel1.BackColor = 'White'
+
     $barCodeLabel1 = New-Object System.Windows.Forms.Label
     $barCodeLabel1.Text = ''
-    $barCodeLabel1.Location = New-Object System.Drawing.Size(50, 170)
-    $barCodeLabel1.Size = New-Object System.Drawing.Size(900, 30)
+    $barCodeLabel1.Location = New-Object System.Drawing.Size($oLabel1.Location.X, ($oLabel1.Location.Y - 25))
+    $barCodeLabel1.Size = New-Object System.Drawing.Size(570, 30)
     $Form.Controls.Add($barCodeLabel1)
     
-    $global:oLabel1 = New-Object System.Windows.Forms.Label
-    $oLabel1.Location = New-Object System.Drawing.Size(50, 200)
-    $oLabel1.Size = New-Object System.Drawing.Size(900, 80)
-    $oLabel1.BackColor = 'White'
-    
     # Barcode 2
-    $barCodeLabel2 = New-Object System.Windows.Forms.Label
-    $barCodeLabel2.Text = ''
-    $barCodeLabel2.Location = New-Object System.Drawing.Size(50, 570)
-    $barCodeLabel2.Size = New-Object System.Drawing.Size(900, 30)
-    $Form.Controls.Add($barCodeLabel2)
-
     $global:oLabel2 = New-Object System.Windows.Forms.Label
-    $oLabel2.Location = New-Object System.Drawing.Size(50, 600)    
-    $oLabel2.Size = New-Object System.Drawing.Size(900, 80)
+    $oLabel2.Location = New-Object System.Drawing.Size(50, ($oLabel1.Location.Y + 200))  
+    $oLabel2.Size = New-Object System.Drawing.Size(570, 80)
+    $oLabel2.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
     $oLabel2.BackColor = 'White'
 
+    $barCodeLabel2 = New-Object System.Windows.Forms.Label
+    $barCodeLabel2.Text = ''
+    $barCodeLabel2.Location = New-Object System.Drawing.Size($oLabel2.Location.X, ($oLabel2.Location.Y - 25))    
+    $barCodeLabel2.Size = New-Object System.Drawing.Size(570, 30)
+    $Form.Controls.Add($barCodeLabel2)
+
     # Barcode 3
+    $global:oLabel3 = New-Object System.Windows.Forms.Label
+    $oLabel3.Location = New-Object System.Drawing.Size(50, ($oLabel2.Location.Y + 200))
+    $oLabel3.Size = New-Object System.Drawing.Size(570, 80)
+    $oLabel3.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
+    $oLabel3.BackColor = 'White'
+
     $barCodeLabel3 = New-Object System.Windows.Forms.Label
     $barCodeLabel3.Text = ''
-    $barCodeLabel3.Location = New-Object System.Drawing.Size(50, 970)
-    $barCodeLabel3.Size = New-Object System.Drawing.Size(900, 30)
+    $barCodeLabel3.Location = New-Object System.Drawing.Size($oLabel3.Location.X, ($oLabel3.Location.Y - 25))    
+    $barCodeLabel3.Size = New-Object System.Drawing.Size(570, 30)
     $Form.Controls.Add($barCodeLabel3)
-
-    $global:oLabel3 = New-Object System.Windows.Forms.Label
-    $oLabel3.Location = New-Object System.Drawing.Size(50, 1000)
-    $oLabel3.Size = New-Object System.Drawing.Size(900, 80)
-    $oLabel3.BackColor = 'White'
 
     #Set the barcode font, and verify that it is installed
     if ($useAlternativeBarcodeFont) {
-        $barcodeFont = $useAlternativeBarcodeFont
+        $barcodeFontName = $useAlternativeBarcodeFont
+        if ($barcodeFontName  -eq 'Libre Barcode 128') {
+            $barcodeFont = New-Object System.Drawing.Font($barcodeFontName, 80)
+        }
+        else {
+            $barcodeFont = New-Object System.Drawing.Font($barcodeFontName, 30)    
+        }        
     }
     else {
         $barcodeFontName = "CCode39"
-    }    
-    $barcodeFont = New-Object System.Drawing.Font($barcodeFontName, 30)    
+        $barcodeFont = New-Object System.Drawing.Font($barcodeFontName, 14)
+    }
+    
     if ($barcodeFont.Name -ne $barcodeFontName) {
         [System.Windows.Forms.MessageBox]::Show("Failed to set barcode font. Please ensure 'CCode39' font is installed.")
         return
