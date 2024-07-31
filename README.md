@@ -58,7 +58,7 @@ Readers can interpert dashes (-) as plus-symbols (+). To avvoid this we can repl
 To convert strings to QR-codes, take a look here: https://github.com/erlwes/PSStringToQRCode
 
 * Pros
-  * They can fit the whole recoverykey in one QR-code. One could actually fit a whole command/script like `manage-bde -unlock c: [KEY]`.
+  * They can fit the whole recoverykey in one QR-code. One could actually fit a whole command/script like `'manage-bde -unlock c: -recoverypassword [KEY]`.
   * Scaning suffix like enter/carriage return code applied by some scanners it not a problem, since everything fits in one scan
   * If you have a 2D/CMOS reader, computer screens it not an issue at all, and lightingconditions etc. will not play a big role
 
