@@ -11,11 +11,11 @@ Generates barcodes from BitLocker Recovery Keys and display it on screen. The sc
 * Input is accepted through GUI, parameter or pipeline
 
 ### How it looks
-![image](https://github.com/user-attachments/assets/10f477fa-79d7-4e15-ae3b-05bbef32760a)
+![Skjermbilde 2024-07-31 210421](https://github.com/user-attachments/assets/f3425823-f59f-4059-bf48-153f307c7a33)
 
 # Tips 💡
 * Hitting the "Escape" character on your keyboard will close the GUI and you will return to your shell
-* It seems that CCD or CMOS scanners will be the best alternative for scanning barcodes of computer screens. Due to ani-reflection coating, laser readers will not always work (so i read)
+* 2D CMOS scanners are recommended. Will be the best alternative for scanning barcodes off computer screens. Due to ani-reflection coating, laser readers will not always work.
 
 # Usage
 
@@ -42,6 +42,12 @@ BitLockerRKToBarcode -BitlockerRecoveryKey "002130-563959-533643-315590-484044-2
 This will use the alternative font specified to generate the barcodes, if the code 39 standard is not compatible with your scanner.
 ```PowerShell
 BitLockerRKToBarcode -useAlternativeBarcodeFont "Libre Barcode 128"
+```
+
+### 🔵Example 5 - Encode dashes
+Readers can interpert dashes (-) as plus-symbols (+). To avvoid this we can replace '-' with '/'
+```PowerShell
+'002130-563959-533643-315590-484044-259380-247291-123563' | BitLockerRKToBarcode -EncodeDashes
 ```
 
 # QR-codes
