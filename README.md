@@ -59,8 +59,8 @@ To convert strings to QR-codes, take a look here: https://github.com/erlwes/PSSt
 
 * Pros
   * They can fit the whole recoverykey in one QR-code. One could actually fit a whole command/script like `manage-bde -unlock c: [KEY]`.
-  * Since one only has to to one scan, the suffix enter/carriage return code applied by some scanners it not a problem
-  * If you have a 2D/CMOS reader - this is more reliable than barcodes
+  * Scaning suffix like enter/carriage return code applied by some scanners it not a problem, since everything fits in one scan
+  * If you have a 2D/CMOS reader, computer screens it not an issue at all, and lightingconditions etc. will not play a big role
 
 * Cons
   * They require 2D/CMOS scanners, so the old scanners you have lying around might not work, and buying one costs more
