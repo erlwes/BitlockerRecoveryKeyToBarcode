@@ -13,9 +13,10 @@ Generates barcodes from BitLocker Recovery Keys and display it on screen. The sc
 ### How it looks
 ![Skjermbilde 2024-07-31 210421](https://github.com/user-attachments/assets/f3425823-f59f-4059-bf48-153f307c7a33)
 
-# Tips on Scanners 💡
-* 2D CMOS scanners are recommended. Will be the best alternative for scanning barcodes off computer screens. Due to ani-reflection coating, laser readers will not always work. CCD works under good conditions
-* To prevent  linebreak/enter/carriage return to be suffixed after each scan there is usually provided configuration barcodes that turn this off. They can be labeled "Suffix ETX" or "Disable Carriage Return"
+# Tips 💡
+* Scanners
+  * 2D CMOS scanners are recommended. Will be the best alternative for scanning barcodes off computer screens. Due to ani-reflection coating, laser readers will not always work. CCD works under good conditions
+  * To prevent  linebreak/enter/carriage return to be suffixed after each scan there is usually provided configuration barcodes that turn this off. They can be labeled "Suffix ETX" or "Disable Carriage Return"
 * Hitting the "Escape" character on your keyboard will close the GUI and you will return to your shell
 
 
