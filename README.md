@@ -54,5 +54,13 @@ Readers can interpert dashes (-) as plus-symbols (+). To avvoid this we can repl
 ```
 
 # QR-codes
-QR-codes would be better, because one would be able to put the entire key in one code, but readers that support this are abit more expensive, and its harder to do in PowerShell.
-There are projects on GitHub generating this QR-codes from string, offline, in script. Some of which loads a binary into memory from a very long string (yikes).
+
+To convert strings to QR-codes, take a look here: https://github.com/erlwes/PSStringToQRCode
+
+* Pros
+  * They can fit the whole recoverykey in one QR-code. One could actually fit a whole command/script like `manage-bde -unlock c: [KEY]`.
+  * Since one only has to to one scan, the suffix enter/carriage return code applied by some scanners it not a problem
+  * If you have a 2D/CMOS reader - this is more reliable than barcodes
+
+* Cons
+  * They require 2D/CMOS scanners, so the old scanners you have lying around might not work, and buying one costs more
